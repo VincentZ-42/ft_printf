@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 12:49:56 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/11 15:39:48 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/12 16:50:56 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ typedef struct		s_var
 
 enum	e_flags 
 {		zero = 1,
-		hash,
-	   	minus,
-		plus,
-		space
+		hash = 1 << 1,
+	   	minus = 1 << 2,
+		plus = 1 << 3,
+		space = 1 << 4
 };
 
 enum	e_lengths
@@ -61,5 +61,8 @@ int		is_length(char c);
 int		c_funct(t_var *info, va_list ap);
 int		s_funct(t_var *info, va_list ap);
 int		p_funct(t_var *info, va_list ap);
+int		id_funct(t_var *info, va_list ap);
+
+void	ft_handle_flags(t_var *info);
 
 #endif

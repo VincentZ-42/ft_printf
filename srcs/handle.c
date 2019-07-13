@@ -1,36 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*   handle.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/15 11:44:23 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/12 13:28:55 by vzhao            ###   ########.fr       */
+/*   Created: 2019/07/12 16:03:00 by vzhao             #+#    #+#             */
+/*   Updated: 2019/07/12 19:56:01 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-char				*ft_itoa(int n)
+void		ft_handle_flags(t_var *info)
 {
-	unsigned int	nbr;
-	size_t			len;
-	char			*fresh;
-
-	nbr = (n < 0) ? n * -1 : n;
-	len = ft_int_len(n);
-	if (!(fresh = (char*)malloc(sizeof(char) * len + 1)))
-		return (NULL);
-	fresh[len--] = '\0';
-	if (nbr == 0)
-		fresh[0] = '0';
-	else if (n < 0)
-		fresh[0] = '-';
-	while (nbr > 0)
-	{
-		fresh[len--] = nbr % 10 + '0';
-		nbr /= 10;
-	}
-	return (fresh);
+	if (info->flag & zero && info->flag & minus)
+		info->flag -= zero;
+	if (info->flag & space && info->flag & plus)
+		info->flag -= space;
+	if (info->flag & zero && info->precision >= 0)
+		info->flag -= zero;
 }

@@ -6,7 +6,7 @@
 #    By: vzhao <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/03 12:47:02 by vzhao             #+#    #+#              #
-#    Updated: 2019/07/10 16:45:53 by vzhao            ###   ########.fr        #
+#    Updated: 2019/07/12 16:09:16 by vzhao            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,11 +16,12 @@ INC = srcs
 FILES = ft_printf.c \
 		get_info.c \
 		check_is.c \
-		type_func.c
+		type_func.c \
+		handle.c
 SRCS = $(patsubst %,$(INC)/%,$(FILES))
 LIBOBJS = $(LIB)/*.o
 OBJS = $(FILES:%.c=%.o)
-FLAGS = -Wall -Wextra -Werror -I $(INC)
+FLAGS = -Wall -Wextra -I $(INC)
 
 all: $(NAME)
 

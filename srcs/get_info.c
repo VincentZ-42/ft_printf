@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/06 17:43:54 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/11 16:42:42 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/12 16:51:52 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,25 @@
 
 char	*get_flag(char *str, t_var *info)
 {
-	//This only looks for 1 flag, can not handle mutiple flags....do later
+	//This keeps scaning and stores all flags into a binary #
+	//Each flag has it's own bit representation in 00000000
 	info->flag = 0;
 	if (is_flag(*str))
 	{
-		if (*str == '0')
-			info->flag = zero;
-		else if (*str == '#')
-			info->flag = hash;
-		else if (*str == '-')
-			info->flag = minus;
-		else if (*str == '+')
-			info->flag = plus;
-		else if (*str == ' ')
-			info->flag = space;
-		str++;
+		while (is_flag(*str))
+		{
+			if (*str == '0')
+				info->flag |= zero;
+			if (*str == '#')
+				info->flag |= hash;
+			if (*str == '-')
+				info->flag |= minus;
+			if (*str == '+')
+				info->flag |= plus;
+			if (*str == ' ')
+				info->flag |= space;
+			str++;
+		}
 	}
 	return (str);
 }
@@ -97,7 +101,7 @@ int		get_info(va_list ap, char *str)
 	str = get_width(str, &info);
 	str = get_precision(str, &info);
 	str = get_length(str, &info);
-
+	ft_handle_flags(&info);
 //	printf("ptr is at %s\n", str);
 //	printf("flag = %d\nwidth = %d\n", info.flag, info.width);
 //	printf("precision = %d\nlength = %d\n", info.precision, info.length);

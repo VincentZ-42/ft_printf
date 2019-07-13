@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/10 13:28:23 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/11 18:07:51 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/12 17:32:18 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define DISPATCH_H
 
 # include "ft_printf.h"
-# define  TYPE_NUM 3
+# define  TYPE_NUM 5
 
 typedef int (*type_funct)(t_var *info, va_list ap);
 
@@ -28,7 +28,9 @@ t_types		dispatch_table[] =
 {
 			{'c', c_funct},
 			{'s', s_funct},
-			{'p', p_funct}
+			{'p', p_funct},
+			{'d', id_funct},
+			{'i', id_funct}
 };
 
 #endif 
