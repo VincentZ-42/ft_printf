@@ -6,17 +6,19 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/06 17:43:54 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/12 16:51:52 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/20 16:48:57 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "dispatch.h"
 
+/* 
+** This keeps scaning and stores all flags into a binary #
+** Each flag has it's own bit representation in 00000000
+*/	
 char	*get_flag(char *str, t_var *info)
 {
-	//This keeps scaning and stores all flags into a binary #
-	//Each flag has it's own bit representation in 00000000
 	info->flag = 0;
 	if (is_flag(*str))
 	{
@@ -80,6 +82,8 @@ char	*get_length(char *str, t_var *info)
 			info->length = j;
 		if (*str == 'z')
 			info->length = z;
+		if (*str == 'L')
+			info->length = L;
 		while (is_length(*str))
 			str++;
 	}
@@ -94,18 +98,12 @@ int		get_info(va_list ap, char *str)
 
 	i = -1;
 	char_count = 0;
-// each of these functions returns the new index after reading the information it needs
-//	printf("\nptr is at %s\n", str);
-//	printf("getting info........\n");
 	str = get_flag(str, &info);
 	str = get_width(str, &info);
 	str = get_precision(str, &info);
 	str = get_length(str, &info);
+	get_conv(str, &info);
 	ft_handle_flags(&info);
-//	printf("ptr is at %s\n", str);
-//	printf("flag = %d\nwidth = %d\n", info.flag, info.width);
-//	printf("precision = %d\nlength = %d\n", info.precision, info.length);
-	va_end(ap);
 	while (++i < TYPE_NUM)
 		if (dispatch_table[i].type == *str)
 			char_count = dispatch_table[i].spec_funct(&info, ap);

@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 12:49:56 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/12 16:50:56 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/20 17:43:11 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@
 # include "../libft/libft.h"
 # include <stdarg.h>
 
+# define llui long long unsigned int
 // Delete this include after finish testing...
 # include <stdio.h>
+# include <limits.h>
 
 typedef struct		s_var
 {
@@ -25,6 +27,7 @@ typedef struct		s_var
 	int				width;
 	int				precision;
 	int				length;
+	char			conv;
 }					t_var;
 
 enum	e_flags 
@@ -42,7 +45,8 @@ enum	e_lengths
 		l,
 		ll,
 		j,
-		z
+		z,
+		L
 };
 
 int		ft_printf(const char *format, ...);
@@ -62,7 +66,27 @@ int		c_funct(t_var *info, va_list ap);
 int		s_funct(t_var *info, va_list ap);
 int		p_funct(t_var *info, va_list ap);
 int		id_funct(t_var *info, va_list ap);
+int		u_funct(t_var *info, va_list ap);
+int		o_funct(t_var *info, va_list ap);
+int		x_funct(t_var *info, va_list ap);
+int		X_funct(t_var *info, va_list ap);
+int		f_funct(t_var *info, va_list ap);
 
 void	ft_handle_flags(t_var *info);
+void	get_conv(char *str, t_var *info);
+int		llui_len_base(long long unsigned int n, int base);
+char	llui_check_base(long long unsigned int n, int base, char choice);
+char	*llui_itoa_base(long long unsigned int n, int base, char choice);
+
+long long unsigned int		apply_length(int length, va_list ap);
+char	*apply_precision(char *print, int prec);
+char	*apply_flags(char *print, t_var *info, llui input);
+char	*apply_width(char *print, int width, int flag);
+
+int		ld_int_len(long double n);
+char	*ld_itoa(long double n);
+char	*ld_decimals(long double input, int prec);
+long double		round_up(long double input, int prec);
+char	*f_add_s_flag_width(char *print, t_var *info, long double input);
 
 #endif

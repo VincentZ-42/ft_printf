@@ -6,35 +6,40 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/10 11:55:54 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/12 19:55:59 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/20 17:43:06 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-//------------------------------------------------------------------------------
-//Do not have to handle length for c conversion but I did...........
-//---------------------------------------------------------------------------
+/*
+** ------------------------------------------------------------------------------
+** Do not have to handle length for c conversion but I did...........
+** wint_t = wchar_t
+** wchar_t can store larger values depending on system
+** wchar_t gives accss to extended character sets
+** ---------------------------------------------------------------------------
+*/
+
+/*
+** Possible error check here
+**
+**	// If (info->flag != minus || info->flag != 0) ERROR
+**	// If (info->precision) ERROR
+**	// ...
+**	// If this flag is on, then we have to adjust our char before printing width
+**	// Should make another function to skim these lines down........
+**	// new function ft_strnew_space(size_t len) ??
+*/
 int		c_funct(t_var *info, va_list ap)
 {
-	// wint_t is the same thing as..
-	// ..wchar_t can store larger values depending on system.
-	// ..gives access to extended character sets
 	char	c;
 	wchar_t wide_c;
-	int size;
-	
-	// Possible error check here
-	// ...
-	// If (info->flag != minus || info->flag != 0) ERROR
-	// If (info->precision) ERROR
-	// ...
-	// If this flag is on, then we have to adjust our char before printing width
-	// Should make another function to skim these lines down........
-	// new function ft_strnew_space(size_t len) ??
+	int size;	
+
+	size = info->width;
 	if (info->flag & minus)
 	{
-		size = info->width;
 		if (info->length == l)
 		{
 			wide_c = va_arg(ap, wchar_t);
@@ -48,11 +53,9 @@ int		c_funct(t_var *info, va_list ap)
 		if (size)
 			while (--size)
 				ft_putchar(' ');
-		return ((info->width) ? info->width : 1);
 	}
 	else
 	{
-		size = info->width;
 		if (size)
 			while (--size)
 				ft_putchar(' ');
@@ -66,8 +69,8 @@ int		c_funct(t_var *info, va_list ap)
 			c = va_arg(ap, int);
 			write(1, &c, 1);
 		}
-		return ((info->width) ? info->width : 1);
 	}
+	return ((info->width) ? info->width : 1);
 }
 
 //------------------------------------------------------------------------------
@@ -88,7 +91,6 @@ int		s_funct(t_var *info, va_list ap)
 	len = ft_strlen(temp);
 	width = (info->width > len) ? info->width - len : 0;
 	padding = ft_memset(ft_strnew(width), ' ', width);
-	printf("width = %d padding = %zu\n", width, ft_strlen(padding)); 
 	if (info->flag & minus)
 		string = ft_strjoin(temp, padding);
 	else
@@ -101,76 +103,25 @@ int		s_funct(t_var *info, va_list ap)
 	return (len);
 }
 
-//------------------------------------------------------------------------------
-//Do not have to handle precision or length for p conversion .....
-// memory addresses are stored in hexadecimal num, which can be stored in
-// a long unsigned int data type
-// All hexadecimal numbers start with "0x" to indicate it is hexadecimal #
-//---------------------------------------------------------------------------
-
-int		ft_int_len_base(long unsigned int nbr, int base)
-{
-	long unsigned int n;
-	int len;
-
-	len = (nbr <= 0) ? 1 : 0;
-//	n = (nbr < 0) ? nbr * -1 : nbr;
-	n = nbr;
-	while (n > 0)
-	{
-		len++;
-		n /= base;
-	}
-	return (len);
-}
-
-char	check_base(long unsigned int n, int base)
-{
-	char c;
-	long unsigned int temp;
-
-	temp = n % base;
-	c = (temp < 10) ? temp + '0' : temp + 'a' - 10;
-	return (c);
-}
-
-char	*ft_itoa_base(long unsigned int value, int base)
-{
-	char *ans;
-	int len;
-	long unsigned int n;
-
-	len = ft_int_len_base(value, base);
-//	n = (base == 10 && value < 0) ? value * -1 : value;
-	n = value;
-	if (!(ans = (char*)malloc(sizeof(char) * len + 1)))
-	   return (NULL);
-	ans[len--] = '\0';
-//	if (value < 0 && base == 10)
-//		ans[0] = '-';
-	if (n == 0)
-		ans[0] = '0';
-	while (n > 0)
-	{
-		ans[len--] = check_base(n, base);
-		n /= base;
-	}
-	return (ans);
-}
-
+/*
+** ------------------------------------------------------------------------------
+** // Do not have to handle precision or length for p conversion .....
+** // memory addresses are stored in hexadecimal num, which can be stored in
+** // a long unsigned int data type
+** // All hexadecimal numbers start with "0x" to indicate it is hexadecimal #
+** ---------------------------------------------------------------------------
+*/
 int		p_funct(t_var *info, va_list ap)
 {
-	long unsigned int address;
+	long long unsigned int address;
 	char *temp;
 	char *temp1;
 	char *padding;
 	int len;
 	int width;
 
-	len = 0;
-// Might need long long unisgned int data type to hold whole memory address
-	address = va_arg(ap, long unsigned int);
-	temp = ft_itoa_base(address, 16);
+	address = va_arg(ap, long long unsigned int);
+	temp = llui_itoa_base(address, 16, 'l');
 	len = ft_strlen(temp) + 2;
 	width = (info->width > len) ? info->width - len : 0;
 	padding = ft_memset(ft_strnew(width), ' ', width);
@@ -220,7 +171,7 @@ char				*ft_itoa_long(long long int n)
 	char			*fresh;
 
 	nbr = (n < 0) ? n * -1 : n;
-	len = ft_int_len(n);
+	len = ft_int_len_long(n);
 	if (!(fresh = (char*)malloc(sizeof(char) * len + 1)))
 		return (NULL);
 	fresh[len--] = '\0';
@@ -331,17 +282,158 @@ int		id_funct(t_var *info, va_list ap)
 	len = ft_strlen(print);
 	ft_putstr(print);
 	free(print);
-//	printf("\nflag = %d\n", info->flag);
-//	printf("\nlength == %d", info->length);
-//	printf("\nprecision = %d\n", info->precision);
+	return (len);
+}
+
+/*
+** ------------------------------------------------------------------------------
+** // u conversion: flags, lengths, width, are all the same as ^^^^^^^^^
+** // '+' is concerned when specifier are 'd i f e E g G'
+** // ' ' is concerned when specifier are 'd i f e E g G'
+** ------------------------------------------------------------------------------
+*/
+
+int		u_funct(t_var *info, va_list ap)
+{
+	long long unsigned int input;
+	char *print;
+	int len;
+
+	input = apply_length(info->length, ap);
+	print = llui_itoa_base(input, 10, 'l');
+	print = apply_precision(print, info->precision);
+	print = apply_width(print, info->width, info->flag);
+	len = ft_strlen(print);
+	ft_putstr(print);
+	ft_strdel(&print);
+	return (len);
+}
+
+/*
+** ------------------------------------------------------------------------------
+** // o, x, X  conversions: flags, lengths, width, are all the same as ^^^^^^^^^
+** ------------------------------------------------------------------------------
+*/
+
+int		o_funct(t_var *info, va_list ap)
+{
+	long long unsigned int input;
+	char *print;
+	int len;
+
+	input = apply_length(info->length, ap);
+	print = llui_itoa_base(input, 8, 'l');
+	print = apply_precision(print, info->precision);
+// did you minus 1 from width when applied the # flag?
+	print = apply_flags(print, info, input);
+	print = apply_width(print, info->width, info->flag);
+	len = ft_strlen(print);
+	ft_putstr(print);
+	ft_strdel(&print);
+	return (len);
+}
+
+int		x_funct(t_var *info, va_list ap)
+{
+	long long unsigned int input;
+	char *print;
+	int len;
+	char *temp;
+
+	input = apply_length(info->length, ap);
+	print = llui_itoa_base(input, 16, 'l');
+	print = apply_precision(print, info->precision);
+	if (info->flag & hash && input != 0)
+	{
+		info->width -= 2;
+		print = apply_width(print, info->width, info->flag);
+		temp = ft_strjoin("0x", print);
+		ft_strdel(&print);
+		print = temp;
+	}
+//	print = apply_flags(print, info->flag);
+	else
+		print = apply_width(print, info->width, info->flag);
+	len = ft_strlen(print);
+	ft_putstr(print);
+	ft_strdel(&print);
+	return (len);
+}
+
+int		X_funct(t_var *info, va_list ap)
+{
+	long long unsigned int input;
+	char *print;
+	int len;
+	char *temp;
+
+	input = apply_length(info->length, ap);
+	print = llui_itoa_base(input, 16, 'U');
+	print = apply_precision(print, info->precision);
+	if (info->flag & hash)
+	{
+		info->width -= 2;
+		print = apply_width(print, info->width, info->flag);
+		temp = ft_strjoin("0X", print);
+		ft_strdel(&print);
+		print = temp;
+	}
+//	print = apply_flags(print, info->flag);
+	else
+		print = apply_width(print, info->width, info->flag);
+	len = ft_strlen(print);
+	ft_putstr(print);
+	ft_strdel(&print);
 	return (len);
 }
 
 //------------------------------------------------------------------------------
-// u conversion: flags, lengths, width, are all the same as ^^^^^^^^^
+// f conversion: Dealing with floating numbers (#s with decimal places)
+// NEED TO FIND A WAY TO DEAL WITH 
 //---------------------------------------------------------------------------
 
-int		u_funct(t_var *info, va_list ap)
+int		f_funct(t_var *info, va_list ap)
 {
-	h
+	long double input;
+	int len;
+	char *temp1;
+	char *temp2;
+	char *print;
+	
+	if (info->length == L)
+		input = va_arg(ap, long double);
+	else
+		input = (long double)va_arg(ap, double);
+// above handles length ^^^^^
+	input = round_up(input, info->precision);
+	temp1 = ld_itoa(input);
+//ld_decimals may have trouble rounding when there are only 6 decimals...
+	temp2 = ld_decimals(input, info->precision);
+//	handles precision n round up based on precision ^^^
+//	printf("\ntemp1 = %s\ntemp2 = %s\n", temp1, temp2);
+	if (temp2 == NULL && info->flag & hash)
+	{
+		print = ft_strjoin(temp1, ".");
+		ft_strdel(&temp1);
+		temp1 = ft_strdup(print);
+		ft_strdel(&print);
+	}
+	else if (temp2 == NULL)
+		;
+	else if (temp2)
+	{
+		print = ft_strjoin(temp1, ".");
+		ft_strdel(&temp1);
+		temp1 = ft_strjoin(print, temp2);
+		ft_strdel(&print);
+	}
+//	printf("\ntemp1 = %s\ntemp2 = %s\n", temp1, temp2);
+//	temp1 = the whole numbers + decimals
+	print = f_add_s_flag_width(temp1, info, input);	
+	ft_putstr(print);
+	len = ft_strlen(print);
+	ft_strdel(&print);
+	ft_strdel(&temp1);
+	ft_strdel(&temp2);
+	return (len);
 }
