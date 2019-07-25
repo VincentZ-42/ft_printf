@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/09 18:38:08 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/10 12:43:41 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/24 17:46:56 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,15 @@ int		is_flag(char c)
 
 int		is_length(char c)
 {
-	if (c == 'h' || c == 'l' || c == 'j' || c == 'z')
+	if (c == 'h' || c == 'l' || c == 'j' || c == 'z' || c =='L')
 		return (1);
 	return (0);
 }
 
 int		is_type(char c)
 {
+	if (c == '%')
+		return (1);
 	if (c == 'c' || c == 's' || c == 'p' || c == 'd' || c == 'i')
 		return (1);
 	if (c == 'o' || c == 'u' || c == 'x' || c == 'X' || c == 'f')

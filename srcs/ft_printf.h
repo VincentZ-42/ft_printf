@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 12:49:56 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/20 17:43:11 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/24 17:39:37 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int		is_type(char c);
 int		is_flag(char c);
 int		is_length(char c);
 
+int		mod_funct(t_var *info, va_list ap);
 int		c_funct(t_var *info, va_list ap);
 int		s_funct(t_var *info, va_list ap);
 int		p_funct(t_var *info, va_list ap);
@@ -78,10 +79,10 @@ int		llui_len_base(long long unsigned int n, int base);
 char	llui_check_base(long long unsigned int n, int base, char choice);
 char	*llui_itoa_base(long long unsigned int n, int base, char choice);
 
-long long unsigned int		apply_length(int length, va_list ap);
-char	*apply_precision(char *print, int prec);
-char	*apply_flags(char *print, t_var *info, llui input);
-char	*apply_width(char *print, int width, int flag);
+llui	apply_length(int length, va_list ap);
+char	*apply_precision(char *print, t_var *info, llui input);
+char	*apply_flags(char *print, t_var *info, llui input, char *sign);
+char	*apply_width(char *print, t_var *info);
 
 int		ld_int_len(long double n);
 char	*ld_itoa(long double n);

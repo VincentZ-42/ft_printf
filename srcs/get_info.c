@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/06 17:43:54 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/20 16:48:57 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/24 18:55:51 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,9 @@ int		get_info(va_list ap, char *str)
 	str = get_length(str, &info);
 	get_conv(str, &info);
 	ft_handle_flags(&info);
+//	printf("flag = %d\nwidth = %d\nprecision = %d\nlength = %d\nconv = %c\n", info.flag, info.width, info.precision, info.length, info.conv);
+	if (!is_type(info.conv))
+		return (0);
 	while (++i < TYPE_NUM)
 		if (dispatch_table[i].type == *str)
 			char_count = dispatch_table[i].spec_funct(&info, ap);

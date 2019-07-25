@@ -6,40 +6,52 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/13 11:57:02 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/20 17:43:09 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/24 18:55:49 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-long long unsigned int		apply_length(int length, va_list ap)
+/*
+** unsigned short int and unsigned char will be promoted to unsigned int
+** So, you do not have to consider length of h or hh
+*/
+llui		apply_length(int length, va_list ap)
 {
-	long long unsigned int	data_type;
+	llui	data_type;
 	
-	if (length == ll)
+	if (length == h)
+		data_type = (llui)va_arg(ap, unsigned short);
+	else if (length == hh)
+		data_type = (llui)va_arg(ap, unsigned char);
+	else if (length == ll)
 		data_type = va_arg(ap, long long unsigned int);
 	else if (length == l)
-		data_type = (long long unsigned int)va_arg(ap, unsigned long int);
-/* unsigned short in and unsigned char can be held in int data type, and 
- * will be promoted to it.....which will give warning when compiling
- * Try using bit storage for holding the data correct, and then chopping ...
- * off any excess info you may receive. 
-	else if (length == h)
-		data_type = (long long unsigned int)va_arg(ap, unsigned short int);
-	else if (length == hh)
-		data_type = (long long unsigned int)va_arg(ap, unsigned char);
-*/	else
-		data_type = (long long unsigned int)va_arg(ap, unsigned int);
+		data_type = (llui)va_arg(ap, unsigned long int);
+//	else if (length == j)
+//		data_type = va_arg(ap, uintmax_t);
+//	else if (length == z)
+//		data_type = va_arg(ap, size_t);
+	else
+		data_type = (llui)va_arg(ap, unsigned int);
 	return (data_type);
 }
 
-char	*apply_precision(char *print, int prec)
+char	*apply_precision(char *print, t_var *info, llui input)
 {
 	int len;
+	int prec;
 	char *padding;
 	char *temp;
 
+	prec = info->precision;
 	len = ft_strlen(print);
+	len += (info->flag & hash && info->conv == 'o') ? 1: 0;
+	if (prec == 0 && input == 0)
+	{
+		ft_strdel(&print);
+		return (ft_strnew(1));
+	}
 	if (prec <= len)
 	   return (print);
 // This means prec > len.......
@@ -52,35 +64,60 @@ char	*apply_precision(char *print, int prec)
 	return (print);
 }
 
-char	*apply_flags(char *print, t_var *info, llui input)
+char	*apply_flags(char *print, t_var *info, llui input, char *sign)
 {
 	char *c;
 	char *temp;
+	llui z;
 
-// can have these two conditions because plus will erase space flag
-/*	c = "\0";
-	if (flag & plus)
-		c = "+";
-	if (flag & space)
-		c = " ";
-Above flags do not apply to u, o, x, or X conversions 
-*/
-	if ((info->flag & hash) && input != 0)
+	z = 0;
+// These flags only apply to d, i, and f conversions
+	if (info->conv == 'd' || info->conv == 'i' || info->conv =='f')
 	{
-		if (info->conv == 'o')
-			c = "0";
-		else if (info->conv == 'x')
-			c = "0x";
-		else if (info->conv == 'X')
-			c = "0X";
-		temp = ft_strjoin(c, print);
-		ft_strdel(&print);
-		print = temp;
+		if (sign[0] == '-')
+		{
+			c = "-";
+			temp = ft_strjoin(c, print);
+			ft_strdel(&print);
+			print = temp;
+		}
+		else if (info->flag & plus || info->flag & space)
+		{
+			if (info->flag & plus)
+				c = sign;
+			else if (info->flag & space)
+				c = " ";
+			temp = ft_strjoin(c, print);
+			ft_strdel(&print);
+			print = temp;
+		}
+	}
+/*
+**	# applies to  o, x, or X conversions 
+*/
+	if (info->conv == 'o' || info->conv == 'x' || info->conv == 'X')
+	{
+		if (info->flag & hash && input != 0)
+		{
+			if (info->conv == 'o')
+				c = "0";
+			else if (info->conv == 'x')
+				c = "0x";
+			else if (info->conv == 'X')
+				c = "0X";
+//			if ((info->conv == 'x' || info->conv == 'X') && input == 0)
+//				return (print);
+//			if (input == 0)
+//				return (print);
+			temp = ft_strjoin(c, print);
+			ft_strdel(&print);
+			print = temp;
+		}
 	}
 	return (print);
 }
 
-char	*apply_width(char *print, int width, int flag)
+char	*apply_width(char *print, t_var *info)
 {
 	char pad = ' ';
 	int len;
@@ -88,33 +125,30 @@ char	*apply_width(char *print, int width, int flag)
 	char *temp;
 
 	len = ft_strlen(print);
-	if (width <= len)
+	if (info->width <= len)
 		return (print);
 // Assume width > len from here on....
-	width -= len;
-	padding = ft_memset(ft_strnew(width), pad, width);
-	if (flag & minus)
+	info->width -= len;
+	padding = ft_memset(ft_strnew(info->width), pad, info->width);
+	if (info->flag & minus)
 	{
 		temp = ft_strjoin(print, padding);
 		ft_strdel(&print);
 		print = temp;
 	}
+	else if (info->flag & zero)
+	{	
+		ft_strdel(&padding);
+		padding = ft_memset(ft_strnew(info->width), '0', info->width);
+		temp = ft_strjoin(padding, print);
+		ft_strdel(&print);
+		print = temp;
+	}
 	else
 	{
-		if (flag & zero)
-		{
-			ft_strdel(&padding);
-			padding = ft_memset(ft_strnew(width), '0', width);
-			temp = ft_strjoin(padding, print);
-			ft_strdel(&print);
-			print = temp;
-		}
-		else
-		{
-			temp = ft_strjoin(padding, print);
-			ft_strdel(&print);
-			print = temp;
-		}
+		temp = ft_strjoin(padding, print);
+		ft_strdel(&print);
+		print = temp;
 	}
 	ft_strdel(&padding);
 	return (print);
