@@ -6,18 +6,19 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/06 17:43:54 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/24 18:55:51 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/26 10:30:05 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "dispatch.h"
 
-/* 
+/*
 ** This keeps scaning and stores all flags into a binary #
 ** Each flag has it's own bit representation in 00000000
-*/	
-char	*get_flag(char *str, t_var *info)
+*/
+
+char		*get_flag(char *str, t_var *info)
 {
 	info->flag = 0;
 	if (is_flag(*str))
@@ -40,9 +41,9 @@ char	*get_flag(char *str, t_var *info)
 	return (str);
 }
 
-char	*get_width(char *str, t_var *info)
+char		*get_width(char *str, t_var *info)
 {
-	int len;
+	int		len;
 
 	len = 0;
 	info->width = 0;
@@ -54,7 +55,7 @@ char	*get_width(char *str, t_var *info)
 	return (str + len);
 }
 
-char	*get_precision(char *str, t_var *info)
+char		*get_precision(char *str, t_var *info)
 {
 	int len;
 
@@ -64,12 +65,12 @@ char	*get_precision(char *str, t_var *info)
 	{
 		str++;
 		info->precision = ft_atoi(str);
-		len = (ft_isdigit(*str)) ? ft_int_len(ft_atoi(str)): 0;
+		len = (ft_isdigit(*str)) ? ft_int_len(ft_atoi(str)) : 0;
 	}
 	return (str + len);
 }
 
-char	*get_length(char *str, t_var *info)
+char		*get_length(char *str, t_var *info)
 {
 	info->length = 0;
 	if (is_length(*str))
@@ -90,11 +91,11 @@ char	*get_length(char *str, t_var *info)
 	return (str);
 }
 
-int		get_info(va_list ap, char *str)
+int			get_info(va_list ap, char *str)
 {
-	t_var info;
-	int i;
-	int	char_count;
+	t_var	info;
+	int		i;
+	int		char_count;
 
 	i = -1;
 	char_count = 0;
@@ -104,8 +105,7 @@ int		get_info(va_list ap, char *str)
 	str = get_length(str, &info);
 	get_conv(str, &info);
 	ft_handle_flags(&info);
-//	printf("flag = %d\nwidth = %d\nprecision = %d\nlength = %d\nconv = %c\n", info.flag, info.width, info.precision, info.length, info.conv);
-	if (!is_type(info.conv))
+	if (!is_type(info.conv) || !*str)
 		return (0);
 	while (++i < TYPE_NUM)
 		if (dispatch_table[i].type == *str)

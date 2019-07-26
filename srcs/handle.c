@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/12 16:03:00 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/24 17:41:08 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/26 11:29:04 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void		ft_handle_flags(t_var *info)
 	if (info->flag & zero && info->precision >= 0)
 	{
 		if (info->conv == 'f')
-			return;
+			return ;
 		else
 			info->flag -= zero;
 	}
@@ -29,10 +29,11 @@ void		ft_handle_flags(t_var *info)
 
 void		get_conv(char *str, t_var *info)
 {
-	info->conv = *str;
+	if (is_type(*str))
+		info->conv = *str;
 }
 
-int			llui_len_base(long long unsigned int n, int base)
+int			llui_len_base(LLUI n, int base)
 {
 	int len;
 
@@ -45,11 +46,11 @@ int			llui_len_base(long long unsigned int n, int base)
 	return (len);
 }
 
-char		llui_check_base(long long unsigned int n, int base, char choice)
+char		llui_check_base(LLUI n, int base, char choice)
 {
-	char c;
-	long long unsigned int temp;
-	unsigned char start;
+	char	c;
+	LLUI	temp;
+	__UC	start;
 
 	start = (choice == 'U') ? 'A' : 'a';
 	temp = n % base;
@@ -57,10 +58,11 @@ char		llui_check_base(long long unsigned int n, int base, char choice)
 	return (c);
 }
 
-char		*llui_itoa_base(long long unsigned int n, int base, char choice)
+char		*llui_itoa_base(LLUI n, int base, char choice)
 {
-	char *ans;
-	int len;
+	char	*ans;
+	int		len;
+
 	len = llui_len_base(n, base);
 	if (!(ans = (char*)malloc(sizeof(char) * len + 1)))
 		return (NULL);
