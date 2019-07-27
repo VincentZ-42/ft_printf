@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 17:11:22 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/26 11:28:49 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/27 10:02:55 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ int			c_funct(t_var *info, va_list ap)
 ** -------------------------------------------------------------
 */
 
+// Need to fix the null case for strings when there is precision......
+// Also address nonprintable strings? check PFT for details. 
 int			s_funct(t_var *info, va_list ap)
 {
 	char	*string;
@@ -152,19 +154,11 @@ int			id_funct(t_var *info, va_list ap)
 	sign = (nbr < 0) ? "-" : "+";
 	input = (nbr < 0) ? (-1) * nbr : nbr;
 	print = llui_itoa_base(input, 10, 'l');
+	print = apply_precision(print, info, input);
 	if (info->flag & zero)
-	{
-		print = apply_precision(print, info, input);
-		if (nbr < 0 || info->flag & plus)
-			info->width--;
-		if (info->flag & space)
-			info->width--;
-		print = apply_width(print, info);
-		print = apply_flags(print, info, sign);
-	}
+		print = zero_id(print, info, nbr, sign);
 	else
 	{
-		print = apply_precision(print, info, input);
 		print = apply_flags(print, info, sign);
 		print = apply_width(print, info);
 	}

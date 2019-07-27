@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 12:49:56 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/26 11:51:35 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/27 10:02:58 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,14 @@ LLUI				apply_length(int length, va_list ap);
 char				*apply_precision(char *print, t_var *info, LLUI input);
 char				*apply_flags(char *print, t_var *info, char *sign);
 char				*apply_width(char *print, t_var *info);
-char				*apply_sign_plus_space(char *print, t_var *info, char *sign);
 
 int					ld_int_len(long double n);
 char				*ld_itoa(long double n);
 char				*ld_decimals(long double input, int prec);
 __LD				round_up(long double input, t_var *info);
 char				*get_f_number(long double input, t_var *info);
+
+char				*apply_flags_sps(char *print, t_var *info, char *sign);
+char				*zero_id(char *print, t_var *info, _LLI nbr, char *sign);
 
 #endif

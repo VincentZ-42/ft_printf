@@ -6,12 +6,11 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/16 16:32:10 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/26 11:15:31 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/27 09:57:11 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-
 /*
 ** ---------------------------------------------------------------------------
 ** ld_int_len does not account for the (-) sign
@@ -39,12 +38,15 @@ char		*ld_itoa(long double input)
 	char	*ans;
 	int		len;
 
-	len = (input == 0) ? 1 : ld_int_len(input);
+	len = (input < 1 && input >= 0) ? 1 : ld_int_len(input);
 	if (!(ans = (char*)malloc(sizeof(char) * len + 1)))
 		return (NULL);
 	ans[len--] = '\0';
-	if (input == 0)
+	if (input < 1 && input >= 0)
+	{
 		ans[0] = '0';
+		return (ans);
+	}
 	input *= (input < 0) ? -1 : 1;
 	while (input >= 1)
 	{

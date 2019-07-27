@@ -6,13 +6,13 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/26 11:38:21 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/26 11:51:32 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/27 09:08:40 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-char	*apply_sign_plus_space(char *print, t_var *info, char *sign)
+char	*apply_flags_sps(char *print, t_var *info, char *sign)
 {
 	char *c;
 	char *temp;
@@ -33,5 +33,16 @@ char	*apply_sign_plus_space(char *print, t_var *info, char *sign)
 		ft_strdel(&print);
 		print = temp;
 	}
+	return (print);
+}
+
+char	*zero_id(char *print, t_var *info, _LLI nbr, char *sign)
+{
+	if (nbr < 0 || info->flag & plus)
+		info->width--;
+	if (info->flag & space)
+		info->width--;
+	print = apply_width(print, info);
+	print = apply_flags(print, info, sign);
 	return (print);
 }

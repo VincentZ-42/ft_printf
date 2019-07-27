@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/13 11:57:02 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/26 11:51:37 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/27 08:35:26 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,15 @@
 /*
 ** unsigned short int and unsigned char will be promoted to unsigned int
 ** So, you do not have to consider length of h or hh
+**-------for id conversion--------
+** h = short int (2 bytes)
+** hh = signed char (1 byte)
+** have to recast because value in the first bit holds the sign
+**-------for unsigned conv-------
+** h = unsigned short (2 bytes)
+** hh = unsigned char (1 bytes)
+** 0xff = 1 byte (11111111)
+** 0xffff = 2 bytes (1111111111111111)
 */
 
 _LLI		id_apply_length(int length, va_list ap)
@@ -22,9 +31,9 @@ _LLI		id_apply_length(int length, va_list ap)
 	_LLI data;
 
 	if (length == h)
-		data = (long long int)va_arg(ap, short int);
+		data = (short int)(0xffff & va_arg(ap, int));
 	else if (length == hh)
-		data = (long long int)va_arg(ap, signed char);
+		data = (signed char)(0xff & va_arg(ap, int));
 	else if (length == l)
 		data = (long long int)va_arg(ap, long int);
 	else if (length == ll)
@@ -39,9 +48,9 @@ LLUI		apply_length(int length, va_list ap)
 	LLUI	data_type;
 
 	if (length == h)
-		data_type = (LLUI)va_arg(ap, unsigned short);
+		data_type = (0xffff & va_arg(ap, unsigned int));
 	else if (length == hh)
-		data_type = (LLUI)va_arg(ap, unsigned char);
+		data_type = (0xff & va_arg(ap, unsigned int));
 	else if (length == ll)
 		data_type = va_arg(ap, long long unsigned int);
 	else if (length == l)
@@ -95,7 +104,7 @@ char		*apply_flags(char *print, t_var *info, char *sign)
 	char	*temp;
 
 	if (info->conv == 'd' || info->conv == 'i' || info->conv == 'f')
-		print = apply_sign_plus_space(print, info, sign);
+		print = apply_flags_sps(print, info, sign);
 	if (info->conv == 'o' || info->conv == 'x' || info->conv == 'X')
 	{
 		if (info->flag & hash && ft_strcmp(print, "0"))

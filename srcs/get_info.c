@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/06 17:43:54 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/26 10:30:05 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/27 09:41:49 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int			get_info(va_list ap, char *str)
 	if (!is_type(info.conv) || !*str)
 		return (0);
 	while (++i < TYPE_NUM)
-		if (dispatch_table[i].type == *str)
-			char_count = dispatch_table[i].spec_funct(&info, ap);
+		if (g_dispatch_table[i].type == *str)
+			char_count = g_dispatch_table[i].spec_funct(&info, ap);
 	return (char_count);
 }

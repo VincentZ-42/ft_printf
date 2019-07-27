@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/10 13:28:23 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/26 08:48:16 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/27 09:41:44 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@
 # include "ft_printf.h"
 # define TYPE_NUM 11
 
-typedef int		(*funct_type)(t_var *info, va_list ap);
+typedef int		(*t_funct)(t_var *info, va_list ap);
 
 typedef struct	s_types
 {
 	char		type;
-	funct_type	spec_funct;
+	t_funct		spec_funct;
 }				t_types;
 
-t_types		dispatch_table[] =
+t_types		g_dispatch_table[] =
 {
 	{'%', mod_funct},
 	{'c', c_funct},
