@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 17:11:22 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/27 10:02:55 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/27 22:15:46 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,27 +71,20 @@ int			c_funct(t_var *info, va_list ap)
 int			s_funct(t_var *info, va_list ap)
 {
 	char	*string;
-	char	*padding;
+	char	*print;
 	char	*temp;
 	int		len;
-	int		width;
 
 	string = va_arg(ap, char*);
 	len = (!string) ? 6 : ft_strlen(string);
 	len = (info->precision >= 0) ? info->precision : len;
 	temp = (!string) ? ft_strdup("(null)") : ft_strsub(string, 0, len);
-	len = ft_strlen(temp);
-	width = (info->width > len) ? info->width - len : 0;
-	padding = ft_memset(ft_strnew(width), ' ', width);
-	if (info->flag & minus)
-		string = ft_strjoin(temp, padding);
-	else
-		string = ft_strjoin(padding, temp);
-	ft_putstr(string);
-	len = ft_strlen(string);
+	print = (info->precision >= 0) ? ft_strsub(temp, 0, len) : ft_strdup(temp);
+	print = apply_width(print, info);
+	ft_putstr(print);
+	len = ft_strlen(print);
+	ft_strdel(&print);
 	ft_strdel(&temp);
-	ft_strdel(&padding);
-	ft_strdel(&string);
 	return (len);
 }
 

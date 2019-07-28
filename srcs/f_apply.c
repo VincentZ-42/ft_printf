@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/16 16:32:10 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/27 09:57:11 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/28 03:30:15 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,13 @@ int			ld_int_len(long double input)
 	return (len);
 }
 
-char		*ld_itoa(long double input)
+char		*ld_itoa(long double nbr)
 {
 	char	*ans;
 	int		len;
+	__LD	input;
 
+	input = (nbr < 0) ? -nbr : nbr;
 	len = (input < 1 && input >= 0) ? 1 : ld_int_len(input);
 	if (!(ans = (char*)malloc(sizeof(char) * len + 1)))
 		return (NULL);
@@ -69,11 +71,13 @@ char		*ld_decimals(long double input, int prec)
 	if (!(ans = (char*)malloc(sizeof(char) * prec + 1)))
 		return (NULL);
 	input *= (input < 0) ? -1 : 1;
+	if (input > 0)
+		input -= (LLUI)input;
 	while (prec--)
 	{
 		input *= 10;
-		ans[i++] = ((long long unsigned int)input % 10) + '0';
-	}
+		ans[i++] = ((LLUI)(input) % 10) + '0';
+	}	
 	if (input == 0)
 		ans[0] = '0';
 	ans[i] = '\0';
@@ -92,8 +96,12 @@ __LD		round_up(long double input, t_var *info)
 		info->precision = 6;
 	prec = info->precision;
 	while (prec--)
+	{
 		temp *= 10;
+		temp -= (LLUI)((double)temp);
+	}
 	prec = info->precision;
+	temp *= 10;
 	if (((long long unsigned int)(temp) % 10) >= 5)
 	{
 		while (prec--)

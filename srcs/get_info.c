@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/06 17:43:54 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/27 09:41:49 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/28 03:13:57 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,17 +57,15 @@ char		*get_width(char *str, t_var *info)
 
 char		*get_precision(char *str, t_var *info)
 {
-	int len;
-
-	len = 0;
 	info->precision = -1;
 	if (*str == '.')
 	{
 		str++;
 		info->precision = ft_atoi(str);
-		len = (ft_isdigit(*str)) ? ft_int_len(ft_atoi(str)) : 0;
+		while (ft_isdigit(*str))
+			str++;
 	}
-	return (str + len);
+	return (str);
 }
 
 char		*get_length(char *str, t_var *info)

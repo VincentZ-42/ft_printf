@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 17:32:20 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/26 10:46:37 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/28 03:30:09 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int			get_next_call(va_list ap, char *str, int count)
 			ft_putchar(str[i]);
 			count++;
 		}
+		if (!str[i])
+			break ;
 		i++;
 	}
 	va_end(ap);
