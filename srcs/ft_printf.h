@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 12:49:56 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/28 03:30:13 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/29 04:06:09 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # define __LD long double
 # define __UC unsigned char
 # define _LLI long long int
+# define BREAK_IF(x) if (x) break
 
 typedef struct		s_var
 {
@@ -56,8 +57,8 @@ int					get_next_call(va_list ap, char *str, int count);
 
 int					get_info(va_list ap, char *str);
 char				*get_flag(char *str, t_var *info);
-char				*get_width(char *str, t_var *info);
-char				*get_precision(char *str, t_var *info);
+char				*get_width(char *str, t_var *info, va_list ap);
+char				*get_precision(char *str, t_var *info, va_list ap);
 char				*get_length(char *str, t_var *info);
 
 int					is_type(char c);
@@ -74,6 +75,9 @@ int					o_funct(t_var *info, va_list ap);
 int					x_funct(t_var *info, va_list ap);
 int					bigx_funct(t_var *info, va_list ap);
 int					f_funct(t_var *info, va_list ap);
+int					b_funct(t_var *info, va_list ap);
+int					bigu_funct(t_var *info, va_list ap);
+int					bigo_funct(t_var *info, va_list ap);
 
 void				ft_handle_flags(t_var *info);
 void				get_conv(char *str, t_var *info);
@@ -96,5 +100,5 @@ char				*get_f_number(long double input, t_var *info);
 char				*apply_flags_sps(char *print, t_var *info, char *sign);
 char				*zero_id(char *print, t_var *info, _LLI nbr, char *sign);
 int					mod_double_num(double a, double b);
-
+int					print_color(char *str, int *index);
 #endif

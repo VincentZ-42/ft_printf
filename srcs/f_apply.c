@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/16 16:32:10 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/28 03:30:15 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/29 01:32:42 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ __LD		round_up(long double input, t_var *info)
 	int		prec;
 
 	add = 1;
+	input += (input < 0) ? -5e-11 : 5e-11;
 	temp = (input < 0) ? -input : input;
 	if (info->precision == -1)
 		info->precision = 6;
@@ -98,11 +99,13 @@ __LD		round_up(long double input, t_var *info)
 	while (prec--)
 	{
 		temp *= 10;
-		temp -= (LLUI)((double)temp);
+		temp -= (LLUI)(temp);
 	}
 	prec = info->precision;
+	if (prec == 0)
+		temp -= (LLUI)temp;
 	temp *= 10;
-	if (((long long unsigned int)(temp) % 10) >= 5)
+	if (temp >= 5.0)
 	{
 		while (prec--)
 			add /= 10;

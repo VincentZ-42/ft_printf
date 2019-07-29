@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/06 17:43:54 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/28 03:13:57 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/29 03:17:37 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char		*get_flag(char *str, t_var *info)
 	return (str);
 }
 
-char		*get_width(char *str, t_var *info)
+char		*get_width(char *str, t_var *info, va_list ap)
 {
 	int		len;
 
@@ -52,15 +52,32 @@ char		*get_width(char *str, t_var *info)
 		info->width = ft_atoi(str);
 		len = ft_int_len(ft_atoi(str));
 	}
+	else if (*str == '*')
+	{
+		info->width = va_arg(ap, int);
+		if (info->width < 0)
+		{
+			info->flag += (info->width < 0) ? minus : 0;
+			info->width *= -1;
+		}
+		str++;
+	}
 	return (str + len);
 }
 
-char		*get_precision(char *str, t_var *info)
+char		*get_precision(char *str, t_var *info, va_list ap)
 {
 	info->precision = -1;
 	if (*str == '.')
 	{
-		str++;
+		while (*str == '.')
+			str++;
+		if (*str == '*')
+		{
+			info->precision = va_arg(ap, int);
+			str++;
+			return (str);
+		}
 		info->precision = ft_atoi(str);
 		while (ft_isdigit(*str))
 			str++;
@@ -98,12 +115,17 @@ int			get_info(va_list ap, char *str)
 	i = -1;
 	char_count = 0;
 	str = get_flag(str, &info);
-	str = get_width(str, &info);
-	str = get_precision(str, &info);
+	str = get_width(str, &info, ap);
+	str = get_precision(str, &info, ap);
 	str = get_length(str, &info);
 	get_conv(str, &info);
 	ft_handle_flags(&info);
-	if (!is_type(info.conv) || !*str)
+	if (*str && !is_type(info.conv))
+	{
+		ft_putchar(*str);
+		return (1);
+	}
+	else if (!is_type(info.conv) || !*str)
 		return (0);
 	while (++i < TYPE_NUM)
 		if (g_dispatch_table[i].type == *str)

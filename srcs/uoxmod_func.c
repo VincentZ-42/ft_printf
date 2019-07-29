@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 18:16:32 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/26 10:44:55 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/29 01:58:59 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,24 +139,14 @@ int			bigx_funct(t_var *info, va_list ap)
 int			mod_funct(t_var *info, va_list ap)
 {
 	int		len;
+	char	*print;
 
 	if (ap)
 		;
-	len = (info->width) ? info->width : 1;
-	info->width--;
-	if (info->flag & minus)
-	{
-		ft_putchar(info->conv);
-		if (len > 1)
-			while (info->width--)
-				ft_putchar(' ');
-	}
-	else
-	{
-		if (len > 1)
-			while (info->width--)
-				ft_putchar(' ');
-		ft_putchar(info->conv);
-	}
+	print = ft_strdup("%");
+	print = apply_width(print, info);
+	len = ft_strlen(print);
+	ft_putstr(print);
+	ft_strdel(&print);
 	return (len);
 }

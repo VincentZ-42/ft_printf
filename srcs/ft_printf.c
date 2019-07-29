@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 17:32:20 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/28 03:30:09 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/29 04:06:04 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@ int			get_next_call(va_list ap, char *str, int count)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '%' && !str[i + 1])
-			return (0);
+		BREAK_IF(str[i] == '%' && !str[i + 1]);
+//		if (str[i] == '{')
+//			count += print_color(str + i, &i);
 		if (str[i] == '%')
 		{
 			count += get_info(ap, str + (++i));
@@ -32,8 +33,7 @@ int			get_next_call(va_list ap, char *str, int count)
 			ft_putchar(str[i]);
 			count++;
 		}
-		if (!str[i])
-			break ;
+		BREAK_IF(!str[i]);
 		i++;
 	}
 	va_end(ap);
