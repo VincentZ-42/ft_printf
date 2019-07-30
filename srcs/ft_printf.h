@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 12:49:56 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/29 04:06:09 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/29 13:38:26 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "../libft/libft.h"
 # include <stdarg.h>
-# include <stdio.h>
 
 # define LLUI long long unsigned int
 # define __LD long double
@@ -99,6 +98,5 @@ char				*get_f_number(long double input, t_var *info);
 
 char				*apply_flags_sps(char *print, t_var *info, char *sign);
 char				*zero_id(char *print, t_var *info, _LLI nbr, char *sign);
-int					mod_double_num(double a, double b);
-int					print_color(char *str, int *index);
+
 #endif

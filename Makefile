@@ -6,7 +6,7 @@
 #    By: vzhao <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/03 12:47:02 by vzhao             #+#    #+#              #
-#    Updated: 2019/07/27 09:42:27 by vzhao            ###   ########.fr        #
+#    Updated: 2019/07/29 13:33:47 by vzhao            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,8 @@ FILES = ft_printf.c \
 		handle.c \
 		apply.c \
 		apply_extra.c \
-		f_apply.c
+		f_apply.c \
+		bonus.c
 SRCS = $(patsubst %,$(INC)/%,$(FILES))
 LIBOBJS = $(LIB)/*.o
 OBJS = $(FILES:%.c=%.o)
@@ -34,7 +35,6 @@ $(NAME):
 	@gcc $(FLAGS) -c $(SRCS)
 	@ar rc $(NAME) $(OBJS) $(LIBOBJS)
 	@ranlib $(NAME)
-	@gcc $(FLAGS) -I $(LIB) -L. -lftprintf -o test_ftprintf main.c
 
 clean:
 	@/bin/rm -f $(OBJS)
@@ -48,6 +48,7 @@ fclean: clean
 re: fclean all
 
 test: re
+	@gcc $(FLAGS) -I $(LIB) -L. -lftprintf -o test_ftprintf main.c
 	@echo "-----------------------------------------------------------------"
 	@./test_ftprintf
 	@echo "-----------------------------------------------------------------"

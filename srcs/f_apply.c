@@ -6,11 +6,12 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/16 16:32:10 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/29 01:32:42 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/29 13:18:40 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
 /*
 ** ---------------------------------------------------------------------------
 ** ld_int_len does not account for the (-) sign
@@ -77,7 +78,7 @@ char		*ld_decimals(long double input, int prec)
 	{
 		input *= 10;
 		ans[i++] = ((LLUI)(input) % 10) + '0';
-	}	
+	}
 	if (input == 0)
 		ans[0] = '0';
 	ans[i] = '\0';
@@ -104,8 +105,7 @@ __LD		round_up(long double input, t_var *info)
 	prec = info->precision;
 	if (prec == 0)
 		temp -= (LLUI)temp;
-	temp *= 10;
-	if (temp >= 5.0)
+	if (temp * 10 >= 5.0)
 	{
 		while (prec--)
 			add /= 10;

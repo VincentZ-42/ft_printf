@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/25 17:11:22 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/29 02:07:17 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/29 13:09:48 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ int			c_funct(t_var *info, va_list ap)
 ** -------------------------------------------------------------
 */
 
-// Need to fix the null case for strings when there is precision......
-// Also address nonprintable strings? check PFT for details. 
 int			s_funct(t_var *info, va_list ap)
 {
 	char	*string;

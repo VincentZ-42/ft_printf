@@ -6,7 +6,7 @@
 /*   By: vzhao <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/26 11:38:21 by vzhao             #+#    #+#             */
-/*   Updated: 2019/07/28 03:09:11 by vzhao            ###   ########.fr       */
+/*   Updated: 2019/07/29 13:40:23 by vzhao            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,4 @@ char	*zero_id(char *print, t_var *info, _LLI nbr, char *sign)
 	print = apply_width(print, info);
 	print = apply_flags(print, info, sign);
 	return (print);
-}
-
-int		mod_double_num(double a, double b)
-{
-	while (a > 9.9)
-		a -= b;
-	if (((double)((int)a)) < a)
-		a += 1;
-//	printf("a = %f\n", a);
-//	a *= (a < 0) ? -1 : 1;
-	return ((int)a);
 }
